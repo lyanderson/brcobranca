@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # -*- encoding: utf-8 -*-
 # @author Kivanio Barbosa
 # @author Ronaldo Araujo
@@ -43,6 +45,12 @@ module Brcobranca
       end
 
       # Número sequencial utilizado para identificar o boleto.
+      # @return [String] 12 caracteres numéricos.
+      def nosso_numero=(valor)
+        @nosso_numero = valor.to_s.rjust(12,'0') if valor
+      end
+
+      # Número sequencial utilizado para identificar o boleto.
       # @return [String] 7 caracteres numéricos.
       def seu_numero=(valor)
         @seu_numero = valor.to_s.rjust(7,'0') if valor
@@ -51,7 +59,7 @@ module Brcobranca
       # Dígito verificador do nosso número.
       # @return [String] 1 caracteres numéricos.
       def nosso_numero_dv
-        nosso_numero = self.numero_documento.to_s.rjust(12,'0') unless self.numero_documento.nil?
+        nosso_numero = self.nosso_numero.to_s.rjust(12,'0') unless self.nosso_numero.nil?
         nosso_numero.modulo11_2to9
       end
 
@@ -60,7 +68,7 @@ module Brcobranca
       # @example
       #  boleto.nosso_numero_boleto #=> "000090002720-7"
       def nosso_numero_boleto
-        nosso_numero = self.numero_documento.to_s.rjust(12,'0') unless self.numero_documento.nil?
+        nosso_numero = self.nosso_numero.to_s.rjust(12,'0') unless self.nosso_numero.nil?
         "#{nosso_numero}-#{self.nosso_numero_dv}"
       end
 
@@ -75,14 +83,13 @@ module Brcobranca
       # Segunda parte do código de barras.
       # 9(01) | Fixo 9 <br/>
       # 9(07) | Convenio <br/>
-      # 9(05) | Fixo 00000<br/>
-      # 9(08) | Nosso Numero<br/>
+      # 9(13) | Nosso Numero<br/>
       # 9(01) | IOF<br/>
       # 9(03) | Carteira de cobrança<br/>
       #
       # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
-        "9#{self.convenio}00000#{self.numero_documento}0#{self.carteira}"
+        "9#{self.convenio}#{self.nosso_numero}0#{self.carteira}"
       end
 
     end
