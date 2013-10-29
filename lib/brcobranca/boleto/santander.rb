@@ -45,9 +45,9 @@ module Brcobranca
       end
 
       # Número sequencial utilizado para identificar o boleto.
-      # @return [String] 12 caracteres numéricos.
+      # @return [String] 13 caracteres numéricos.
       def nosso_numero=(valor)
-        @nosso_numero = valor.to_s.rjust(12,'0') if valor
+        @nosso_numero = valor.to_s.rjust(13,'0') if valor
       end
 
       # Número sequencial utilizado para identificar o boleto.
@@ -59,8 +59,8 @@ module Brcobranca
       # Dígito verificador do nosso número.
       # @return [String] 1 caracteres numéricos.
       def nosso_numero_dv
-        nosso_numero = self.nosso_numero.to_s.rjust(12,'0') unless self.nosso_numero.nil?
-        nosso_numero.modulo11_2to9
+        nosso_numero = self.nosso_numero
+        nosso_numero[-1]
       end
 
       # Nosso número para exibir no boleto.
@@ -68,8 +68,8 @@ module Brcobranca
       # @example
       #  boleto.nosso_numero_boleto #=> "000090002720-7"
       def nosso_numero_boleto
-        nosso_numero = self.nosso_numero.to_s.rjust(12,'0') unless self.nosso_numero.nil?
-        "#{nosso_numero}-#{self.nosso_numero_dv}"
+        nosso_numero = self.nosso_numero
+        "#{nosso_numero}".insert 12, '-'
       end
 
       # Agência + codigo do cedente do cliente para exibir no boleto.
