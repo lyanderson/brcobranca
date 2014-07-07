@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# encoding: utf-8
 
 begin
   require 'rghost'
@@ -70,7 +70,11 @@ module Brcobranca
         def modelo_generico(boleto, options={})
           doc=Document.new :paper => :A4 # 210x297
 
-          template_path = File.join(File.dirname(__FILE__),'..','..','arquivos','templates','modelo_generico.eps')
+          if boleto.status == "ativo"
+            template_path = File.join(File.dirname(__FILE__),'..','..','arquivos','templates','modelo_generico.eps')
+          else
+            template_path = File.join(File.dirname(__FILE__),'..','..','arquivos','templates','modelo_generico_cancelado.eps')
+          end
 
           raise "Não foi possível encontrar o template. Verifique o caminho" unless File.exist?(template_path)
 

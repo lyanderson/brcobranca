@@ -1,6 +1,5 @@
 # encoding: utf-8
 
-# -*- encoding: utf-8 -*-
 # @author Kivanio Barbosa
 # @author Ronaldo Araujo
 module Brcobranca
@@ -47,7 +46,7 @@ module Brcobranca
       # Número sequencial utilizado para identificar o boleto.
       # @return [String] 12 caracteres numéricos.
       def nosso_numero=(valor)
-        @nosso_numero = valor.to_s.rjust(12,'0') if valor
+        @nosso_numero = valor.to_s.rjust(13,'0') if valor
       end
 
       # Número sequencial utilizado para identificar o boleto.
@@ -60,11 +59,11 @@ module Brcobranca
       # @return [String] 1 caracteres numéricos.
       def nosso_numero_dv
         if self.nosso_numero.nil?
-          nosso_numero = self.numero_documento.to_s.rjust(12,'0')
-          return nosso_numero.modulo11_2to9
+          nosso_numero = self.numero_documento.to_s.rjust(12,'0') unless self.numero_documento.nil?
+          nosso_numero.modulo11_2to9
         else
           nosso_numero = self.nosso_numero
-          return nosso_numero[-1]
+          nosso_numero[-1]
         end
       end
 
@@ -74,11 +73,11 @@ module Brcobranca
       #  boleto.nosso_numero_boleto #=> "000090002720-7"
       def nosso_numero_boleto
         if self.nosso_numero.nil?
-          nosso_numero = self.numero_documento.to_s.rjust(12,'0')
-          return "#{nosso_numero}-#{self.nosso_numero_dv}"
+          nosso_numero = self.numero_documento.to_s.rjust(12,'0') unless self.numero_documento.nil?
+          "#{nosso_numero}-#{self.nosso_numero_dv}"
         else
           nosso_numero = self.nosso_numero
-          return "#{nosso_numero}".insert 12, '-'
+          "#{nosso_numero}".insert 12, '-'
         end
       end
 

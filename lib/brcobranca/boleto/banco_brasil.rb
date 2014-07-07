@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# encoding: utf-8
+
 module Brcobranca
   module Boleto
     class BancoBrasil < Base # Banco do Brasil

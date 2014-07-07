@@ -1,6 +1,5 @@
 # encoding: utf-8
 
-# -*- encoding: utf-8 -*-
 # @author Kivanio Barbosa
 module Brcobranca
   module Boleto
@@ -75,9 +74,11 @@ module Brcobranca
       attr_accessor :sacado_endereco
       # <b>REQUERIDO</b>: Documento da pessoa que receberá o boleto
       attr_accessor :sacado_documento
+      # <b>REQUERIDO</b>: Status do boleto
+      attr_accessor :status
 
       # Validações
-      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, :message => "não pode estar em branco."
+      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, :status, :message => "não pode estar em branco."
       validates_numericality_of :convenio, :agencia, :conta_corrente, :numero_documento, :nosso_numero, :message => "não é um número.", :allow_nil => true
 
       # Nova instancia da classe Base
@@ -130,7 +131,11 @@ module Brcobranca
       # Dígito verificador do nosso número
       # @return [Integer] 1 caracteres numéricos.
       def nosso_numero_dv
-        self.nosso_numero.modulo11_9to2
+        if self.nosso_numero.nil?
+          self.numero_documento.modulo11_9to2
+        else
+          self.nosso_numero.modulo11_9to2
+        end
       end
 
       # @abstract Deverá ser sobreescrito para cada banco.
